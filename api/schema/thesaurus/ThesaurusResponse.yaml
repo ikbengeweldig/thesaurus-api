@@ -1,0 +1,12 @@
+type: object
+title: ThesaurusResponse
+required:
+  - term
+  - type
+properties:
+  term:
+    type: string
+    description: term content
+  type:
+    $ref: './ThesaurusTypeEnum.yaml'
+    description: type of the term

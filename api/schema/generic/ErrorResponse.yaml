@@ -1,0 +1,26 @@
+type: object
+title: ErrorResponse
+description: standard error response
+required:
+  - status
+  - error
+  - message
+  - path
+  - timestamp
+properties:
+  status:
+    type: integer
+    example: 400
+  error:
+    type: string
+    example: Bad Request
+  message:
+    type: string
+    example: server.error.internal
+  path:
+    type: string
+    example: /api/thesaurus
+  timestamp:
+    type: string
+    format: date-time
+    example: "2025-05-29T14:32:45.123Z"

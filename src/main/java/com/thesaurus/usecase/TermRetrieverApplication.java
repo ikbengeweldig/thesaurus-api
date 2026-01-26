@@ -1,5 +1,7 @@
 package com.thesaurus.usecase;
 
+import com.thesaurus.converter.StopWordConverter;
+import com.thesaurus.converter.ThesaurusTermConverter;
 import com.thesaurus.domain.core.FileContent;
 import com.thesaurus.domain.core.StopWord;
 import com.thesaurus.domain.core.ThesaurusTerm;
@@ -23,16 +25,21 @@ public class TermRetrieverApplication {
 
     private static final String WINDOWS_1252 = "windows-1252";
 
-    private final List<StopWord> stopWords;
-    private final List<ThesaurusTerm> thesaurusTerms;
+    public List<ThesaurusTerm> retrieveTerms(Resource inputFile, Resource thesaurusTermsFile, Resource stopWordsFile) {
 
-    public List<ThesaurusTerm> retrieveTerms(Resource inputFile) {
+        try {
+            List<StopWord> stopWords = StopWordConverter.convert(stopWordsFile);
+            FileContent fileContent = getFileContent(inputFile, stopWords);
 
-        FileContent fileContent = getFileContent(inputFile);
-        return fileContent.findThesaurusTerms(thesaurusTerms);
+            List<ThesaurusTerm> thesaurusTerms = ThesaurusTermConverter.convert(thesaurusTermsFile);
+            return fileContent.findThesaurusTerms(thesaurusTerms);
+        } catch (IOException e) {
+            log.debug("error happened while processing the file: {}", e.getMessage());
+            throw new RuntimeException(e);
+        }
     }
 
-    private FileContent getFileContent(Resource inputFile) {
+    private FileContent getFileContent(Resource inputFile, List<StopWord> stopWords) {
 
         try {
             Path filePath = getFilePath(inputFile);

@@ -1,0 +1,108 @@
+openapi: 3.0.3
+
+info:
+  title: Thesaurus API
+  version: 1.0.0
+  description: API for retrieving thesaurus terms
+
+servers:
+  - url: https://{host}
+    variables:
+      host:
+        default: demo.thesaurus.com
+        enum:
+          - demo.thesaurus.com
+          - localhost
+
+paths:
+
+   /api/rest/thesaurus:
+
+    get:
+      summary: retrieves thesaurus terms found in test input files
+      tags:
+        - RetrieveThesaurus
+      operationId: retrieve
+      responses:
+        '200':
+          description: thesaurus terms were retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: './schema/thesaurus/ThesaurusResponse.yaml'
+        '400':
+          description: invalid request
+          content:
+            application/json:
+              schema:
+                $ref: './schema/generic/ErrorResponse.yaml'
+        '401':
+          description: unauthorized (token missing or invalid)
+          content:
+            application/json:
+              schema:
+                $ref: './schema/generic/ErrorResponse.yaml'
+        '500':
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: './schema/generic/ErrorResponse.yaml'
+
+    post:
+      summary: retrieves a list of thesaurus terms based on given input files
+      tags:
+        - RetrieveThesaurus
+      operationId: upload-and-retrieve
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - thesaurusTerms
+                - stopWords
+                - document
+              properties:
+                thesaurusTerms:
+                  type: string
+                  format: binary
+                  description: CSV file with thesaurus terms
+                stopWords:
+                  type: string
+                  format: binary
+                  description: Stopwords list file
+                document:
+                  type: string
+                  format: binary
+                  description: Document to analyse
+      responses:
+        '200':
+          description: thesaurus terms were retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: './schema/thesaurus/ThesaurusResponse.yaml'
+        '400':
+          description: invalid request
+          content:
+            application/json:
+              schema:
+                $ref: './schema/generic/ErrorResponse.yaml'
+        '401':
+          description: unauthorized (token missing or invalid)
+          content:
+            application/json:
+              schema:
+                $ref: './schema/generic/ErrorResponse.yaml'
+        '500':
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: './schema/generic/ErrorResponse.yaml'

@@ -1,0 +1,7 @@
+title: ThesaurusTypeEnum
+type: string
+enum:
+  - LOCATION
+  - PERSON_NAME
+  - SUBJECT
+  - ORGANISATION
