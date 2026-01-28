@@ -1,5 +1,6 @@
 package com.thesaurus.infrastructure.in;
 
+import com.thesaurus.api.model.AlgorithmTypeEnum;
 import com.thesaurus.api.model.ThesaurusResponse;
 import com.thesaurus.api.rest.RetrieveThesaurusApi;
 import com.thesaurus.usecase.TermRetrieverApplication;
@@ -29,9 +30,9 @@ public class RetrieveThesaurusRestAdapter implements RetrieveThesaurusApi {
     private Resource thesaurusTermsFile;
 
     @Override
-    public ResponseEntity<List<ThesaurusResponse>> retrieve() {
+    public ResponseEntity<List<ThesaurusResponse>> retrieve(AlgorithmTypeEnum algorithmType) {
 
-        List<ThesaurusResponse> result = termRetrieverApplication.retrieveTerms(sampleDoc, thesaurusTermsFile, stopWordsFile)
+        List<ThesaurusResponse> result = termRetrieverApplication.retrieveTerms(sampleDoc, thesaurusTermsFile, stopWordsFile, algorithmType)
                                                                  .stream()
                                                                  .map(thesaurusResponseMapper::map)
                                                                  .toList();
@@ -39,11 +40,15 @@ public class RetrieveThesaurusRestAdapter implements RetrieveThesaurusApi {
     }
 
     @Override
-    public ResponseEntity<List<ThesaurusResponse>> uploadAndRetrieve(MultipartFile thesaurusTerms, MultipartFile stopWords, MultipartFile document) {
+    public ResponseEntity<List<ThesaurusResponse>> uploadAndRetrieve(MultipartFile document,
+                                                                     MultipartFile thesaurusTerms,
+                                                                     MultipartFile stopWords,
+                                                                     AlgorithmTypeEnum algorithmType) {
 
         List<ThesaurusResponse> result = termRetrieverApplication.retrieveTerms(document.getResource(),
                                                                                 thesaurusTerms.getResource(),
-                                                                                stopWords.getResource())
+                                                                                stopWords.getResource(),
+                                                                                algorithmType)
                                                                  .stream()
                                                                  .map(thesaurusResponseMapper::map)
                                                                  .toList();

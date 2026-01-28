@@ -1,5 +1,6 @@
 package com.thesaurus.usecase;
 
+import com.thesaurus.api.model.AlgorithmTypeEnum;
 import com.thesaurus.domain.core.TermType;
 import com.thesaurus.domain.core.ThesaurusTerm;
 import org.junit.jupiter.api.Test;
@@ -27,6 +28,12 @@ class TermRetrieverApplicationIT {
     @Value("classpath:input/sampledoc.txt")
     private Resource sampleDoc;
 
+    @Value("classpath:input/stopwords.txt")
+    private Resource stopWordsFile;
+
+    @Value("classpath:input/gtaa-terms.csv")
+    private Resource thesaurusTermsFile;
+
     private static void assertContainsTerm(List<ThesaurusTerm> actual, String expectedTerm, TermType expectedType) {
 
         String expectedNorm = normalize(expectedTerm);
@@ -47,7 +54,7 @@ class TermRetrieverApplicationIT {
     @Test
     void retrieveTerms_happy_path() {
 
-        List<ThesaurusTerm> terms = termRetrieverApplication.retrieveTerms(sampleDoc);
+        List<ThesaurusTerm> terms = termRetrieverApplication.retrieveTerms(sampleDoc, thesaurusTermsFile, stopWordsFile, AlgorithmTypeEnum.TRIE);
 
         assertNotNull(terms, "retrieveTerms should never return null");
 

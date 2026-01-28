@@ -1,0 +1,5 @@
+title: AlgorithmType
+type: string
+enum:
+  - TRIE
+  - AHO_CORASICK

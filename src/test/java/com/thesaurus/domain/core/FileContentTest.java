@@ -70,7 +70,7 @@ class FileContentTest {
                                                  .termType(TermType.LOCATION)
                                                  .build();
 
-        List<ThesaurusTerm> found = fc.findThesaurusTerms(List.of(newYork, newYorkCity));
+        List<ThesaurusTerm> found = fc.findThesaurusTerms(List.of(newYork, newYorkCity), AlgorithmType.TRIE);
 
         assertEquals(2, found.size());
 
@@ -93,7 +93,7 @@ class FileContentTest {
     void findThesaurusTerms_null_input_returns_empty_list() {
 
         FileContent fc = new FileContent("Amsterdam");
-        List<ThesaurusTerm> found = fc.findThesaurusTerms(null);
+        List<ThesaurusTerm> found = fc.findThesaurusTerms(null, AlgorithmType.TRIE);
 
         assertNotNull(found);
         assertTrue(found.isEmpty());

@@ -23,6 +23,12 @@ paths:
       tags:
         - RetrieveThesaurus
       operationId: retrieve
+      parameters:
+        - in: query
+          name: algorithmType
+          schema:
+            $ref: './schema/thesaurus/AlgorithmTypeEnum.yaml'
+          description: algorithm to be used for retrieving
       responses:
         '200':
           description: thesaurus terms were retrieved successfully
@@ -56,6 +62,12 @@ paths:
       tags:
         - RetrieveThesaurus
       operationId: upload-and-retrieve
+      parameters:
+        - in: query
+          name: algorithmType
+          schema:
+            $ref: './schema/thesaurus/AlgorithmTypeEnum.yaml'
+          description: algorithm to be used for retrieving
       requestBody:
         required: true
         content:
@@ -63,10 +75,14 @@ paths:
             schema:
               type: object
               required:
+                - document
                 - thesaurusTerms
                 - stopWords
-                - document
               properties:
+                document:
+                  type: string
+                  format: binary
+                  description: Document to analyse
                 thesaurusTerms:
                   type: string
                   format: binary
@@ -75,10 +91,6 @@ paths:
                   type: string
                   format: binary
                   description: Stopwords list file
-                document:
-                  type: string
-                  format: binary
-                  description: Document to analyse
       responses:
         '200':
           description: thesaurus terms were retrieved successfully
