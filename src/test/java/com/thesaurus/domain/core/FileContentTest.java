@@ -1,6 +1,9 @@
 package com.thesaurus.domain.core;
 
+import com.thesaurus.api.model.AlgorithmTypeEnum;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import java.util.List;
 
@@ -40,10 +43,7 @@ class FileContentTest {
 
         fc.removeStopWords(List.of(new StopWord("the")));
 
-        assertEquals(
-                List.of(new Word("theatre"), new Word("theme")),
-                fc.getWords()
-        );
+        assertEquals(List.of(new Word("theatre"), new Word("theme")), fc.getWords());
     }
 
     @Test
@@ -55,8 +55,9 @@ class FileContentTest {
         assertEquals(List.of(new Word("a"), new Word("c")), fc.getWords());
     }
 
-    @Test
-    void findThesaurusTerms_prefers_longest_match_and_skips_overlaps() {
+    @ParameterizedTest
+    @EnumSource(AlgorithmType.class)
+    void findThesaurusTerms_prefers_longest_match_and_skips_overlaps(AlgorithmType algorithmType) {
 
         FileContent fc = new FileContent("New York City is bigger than New York");
 
@@ -70,7 +71,7 @@ class FileContentTest {
                                                  .termType(TermType.LOCATION)
                                                  .build();
 
-        List<ThesaurusTerm> found = fc.findThesaurusTerms(List.of(newYork, newYorkCity), AlgorithmType.TRIE);
+        List<ThesaurusTerm> found = fc.findThesaurusTerms(List.of(newYork, newYorkCity), algorithmType);
 
         assertEquals(2, found.size());
 
@@ -89,11 +90,12 @@ class FileContentTest {
                           .getTermType());
     }
 
-    @Test
-    void findThesaurusTerms_null_input_returns_empty_list() {
+    @ParameterizedTest
+    @EnumSource(AlgorithmType.class)
+    void findThesaurusTerms_null_input_returns_empty_list(AlgorithmType algorithmType) {
 
         FileContent fc = new FileContent("Amsterdam");
-        List<ThesaurusTerm> found = fc.findThesaurusTerms(null, AlgorithmType.TRIE);
+        List<ThesaurusTerm> found = fc.findThesaurusTerms(null, algorithmType);
 
         assertNotNull(found);
         assertTrue(found.isEmpty());

@@ -1,9 +1,11 @@
 package com.thesaurus.usecase;
 
 import com.thesaurus.api.model.AlgorithmTypeEnum;
+import com.thesaurus.domain.core.AlgorithmType;
 import com.thesaurus.domain.core.TermType;
 import com.thesaurus.domain.core.ThesaurusTerm;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -51,10 +53,11 @@ class TermRetrieverApplicationIT {
                                                                                                                      .toList()));
     }
 
-    @Test
-    void retrieveTerms_happy_path() {
+    @ParameterizedTest
+    @EnumSource(AlgorithmTypeEnum.class)
+    void retrieveTerms_happy_path(AlgorithmTypeEnum algorithmType) {
 
-        List<ThesaurusTerm> terms = termRetrieverApplication.retrieveTerms(sampleDoc, thesaurusTermsFile, stopWordsFile, AlgorithmTypeEnum.TRIE);
+        List<ThesaurusTerm> terms = termRetrieverApplication.retrieveTerms(sampleDoc, thesaurusTermsFile, stopWordsFile, algorithmType);
 
         assertNotNull(terms, "retrieveTerms should never return null");
 
